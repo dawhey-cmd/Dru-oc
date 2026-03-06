@@ -1,0 +1,190 @@
+{
+  "application": {
+    "name": "OpenClaw Installer",
+    "description": "Professional automated installer for OpenClaw AI Agent",
+    "version": "1.0.0",
+    "type": "installer-dashboard"
+  },
+  "brand_identity": {
+    "name": "OpenClaw",
+    "archetype": "The Abyssal Architect",
+    "keywords": ["Deep", "Powerful", "Secure", "Organic", "Technical"],
+    "emotion": "Professional confidence with a hint of primal power"
+  },
+  "design_system": {
+    "theme": "dark",
+    "colors": {
+      "palette_name": "Abyssal Lobster",
+      "backgrounds": {
+        "primary": "#050A14",
+        "secondary": "#0B1221",
+        "tertiary": "#151F32",
+        "surface": "#0F1729"
+      },
+      "accents": {
+        "primary": "#FF5A36",
+        "primary_hover": "#FF7A5C",
+        "secondary": "#00F0FF",
+        "success": "#00E676",
+        "warning": "#FFC107",
+        "error": "#FF3B30",
+        "biolum": "#00F0FF"
+      },
+      "text": {
+        "primary": "#F8FAFC",
+        "secondary": "#94A3B8",
+        "muted": "#64748B",
+        "code": "#A5B4FC"
+      },
+      "borders": {
+        "subtle": "#1E293B",
+        "highlight": "#334155",
+        "active": "#FF5A36"
+      }
+    },
+    "typography": {
+      "font_family": {
+        "sans": ["Manrope", "sans-serif"],
+        "mono": ["JetBrains Mono", "monospace"],
+        "display": ["Space Grotesk", "sans-serif"]
+      },
+      "usage": {
+        "headings": "Manrope",
+        "body": "Manrope",
+        "code_blocks": "JetBrains Mono",
+        "captions": "JetBrains Mono",
+        "nav": "Manrope"
+      },
+      "scaling": {
+        "h1": "text-5xl md:text-6xl font-bold tracking-tight",
+        "h2": "text-3xl md:text-4xl font-semibold tracking-tight",
+        "h3": "text-2xl font-medium",
+        "body_lg": "text-lg leading-relaxed",
+        "body": "text-base leading-relaxed text-slate-300"
+      }
+    },
+    "spacing": {
+      "scale": "relaxed",
+      "container_padding": "p-8 md:p-12",
+      "grid_gap": "gap-6 md:gap-8",
+      "section_gap": "gap-16 md:gap-24"
+    },
+    "borders": {
+      "radius": {
+        "sm": "rounded-sm",
+        "md": "rounded",
+        "lg": "rounded-lg",
+        "full": "rounded-full"
+      },
+      "width": "border",
+      "style": "solid"
+    },
+    "effects": {
+      "glassmorphism": "backdrop-blur-xl bg-slate-950/70 border border-slate-800/50 shadow-2xl",
+      "glow": "shadow-[0_0_20px_-5px_rgba(255,90,54,0.3)]",
+      "terminal_glow": "shadow-[0_0_10px_rgba(0,240,255,0.2)]"
+    }
+  },
+  "layout_strategies": {
+    "dashboard_grid": {
+      "type": "bento",
+      "columns": "grid-cols-1 md:grid-cols-12",
+      "gap": "gap-6",
+      "areas": {
+        "hero": "col-span-full md:col-span-8",
+        "stats": "col-span-full md:col-span-4",
+        "config_main": "col-span-full md:col-span-8",
+        "config_side": "col-span-full md:col-span-4"
+      }
+    },
+    "installer_wizard": {
+      "container": "max-w-5xl mx-auto min-h-screen flex flex-col",
+      "step_indicator": "flex justify-between items-center py-8",
+      "content_area": "flex-grow relative z-10"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#FF5A36] hover:bg-[#FF7A5C] text-white font-bold py-3 px-8 rounded-lg shadow-[0_4px_14px_0_rgba(255,90,54,0.39)] transition-all transform hover:-translate-y-0.5 active:translate-y-0",
+      "secondary": "bg-transparent border border-slate-700 text-slate-300 hover:text-white hover:border-slate-500 py-3 px-8 rounded-lg transition-all",
+      "ghost": "text-slate-400 hover:text-[#FF5A36] transition-colors"
+    },
+    "cards": {
+      "base": "bg-[#0B1221] border border-slate-800 rounded-xl p-6 hover:border-slate-700 transition-colors relative overflow-hidden group",
+      "glass": "backdrop-blur-md bg-[#0B1221]/80 border border-slate-800/50 rounded-xl p-6",
+      "interactive": "cursor-pointer hover:shadow-[0_0_30px_-10px_rgba(255,90,54,0.15)] hover:border-[#FF5A36]/30 transition-all duration-300"
+    },
+    "inputs": {
+      "base": "bg-[#050A14] border border-slate-800 focus:border-[#FF5A36] text-white rounded-md p-3 w-full outline-none transition-colors font-mono text-sm",
+      "code": "font-mono bg-black/50 border-slate-800 text-[#00F0FF]"
+    },
+    "progress": {
+      "bar": "h-2 bg-slate-800 rounded-full overflow-hidden",
+      "fill": "h-full bg-[#FF5A36] transition-all duration-500 ease-out"
+    }
+  },
+  "assets": {
+    "images": [
+      {
+        "url": "https://images.unsplash.com/photo-1665989099287-3948d871232c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwzfHxsb2JzdGVyJTIwYWJzdHJhY3QlMjBtaW5pbWFsJTIwdGVjaG5vbG9neSUyMGRhcmt8ZW58MHx8fHwxNzcyNzk4MTIzfDA&ixlib=rb-4.1.0&q=85",
+        "description": "Abstract Red Liquid (Abstract Lobster Metaphor)",
+        "category": "hero_background"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1769120064057-490b9b66305e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTF8MHwxfHNlYXJjaHwyfHxyZWQlMjBuZW9uJTIwYWJzdHJhY3QlMjBkaWdpdGFsJTIwYXJ0fGVufDB8fHx8MTc3Mjc5ODEzNnww&ixlib=rb-4.1.0&q=85",
+        "description": "Abstract Red Neon Pattern",
+        "category": "texture_overlay"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1762278804943-9a88e68620b3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTF8MHwxfHNlYXJjaHw0fHxyZWQlMjBuZW9uJTIwYWJzdHJhY3QlMjBkaWdpdGFsJTIwYXJ0fGVufDB8fHx8MTc3Mjc5ODEzNnww&ixlib=rb-4.1.0&q=85",
+        "description": "Neon Digital Streaks",
+        "category": "loading_state"
+      }
+    ],
+    "icons": {
+      "library": "lucide-react",
+      "custom": "Use 'Shell' or 'Database' icons for system checks"
+    }
+  },
+  "animations": {
+    "library": "framer-motion",
+    "defaults": {
+      "page_transition": {
+        "initial": { "opacity": 0, "y": 20 },
+        "animate": { "opacity": 1, "y": 0 },
+        "exit": { "opacity": 0, "y": -20 },
+        "transition": { "duration": 0.4, "ease": "easeOut" }
+      },
+      "hover_lift": {
+        "scale": 1.02,
+        "transition": { "duration": 0.2 }
+      }
+    }
+  },
+  "accessibility": {
+    "rules": [
+      "Ensure color contrast of at least 4.5:1 for text",
+      "Use semantic HTML tags (nav, main, section)",
+      "Provide aria-labels for icon-only buttons",
+      "Support keyboard navigation for all inputs and steps"
+    ]
+  },
+  "instructions_to_main_agent": [
+    "CREATE a new React application in `/app/installer-dashboard` (or root if preferred/empty).",
+    "DO NOT use the existing `ui/` folder as it is Lit/Vite based and the user requested React.",
+    "Implement a 'Wizard' state machine for the installation steps.",
+    "Use 'sonner' for toast notifications (e.g., 'API Key Validated').",
+    "Use 'recharts' if data visualization is needed for system diagnostics.",
+    "Implement a 'Terminal' component that streams logs.",
+    "For the 'Lobster' theme, use the #FF5A36 color sparingly as a high-impact accent, do not overuse it.",
+    "The 'System Check' page should look like a sci-fi diagnostic screen.",
+    "ALWAYS include `data-testid` on interactive elements."
+  ],
+  "universal_guidelines": [
+    "No gradients on large surfaces, use subtle noise textures instead.",
+    "Use 2x more padding than you think is necessary.",
+    "Avoid centering everything. Use asymmetric layouts.",
+    "Use 'JetBrains Mono' for all data, versions, and paths.",
+    "Dark mode is mandatory. There is no light mode."
+  ]
+}
