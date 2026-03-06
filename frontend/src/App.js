@@ -8,18 +8,29 @@ import ApiKeysPage from './components/ApiKeysPage';
 import SecurityPage from './components/SecurityPage';
 import SkillsPage from './components/SkillsPage';
 import ReviewPage from './components/ReviewPage';
+import ProfilesPage from './components/ProfilesPage';
+import ShareConfigPage from './components/ShareConfigPage';
+import AnalyticsPage from './components/AnalyticsPage';
+import MarketplacePage from './components/MarketplacePage';
+import DesktopAppPage from './components/DesktopAppPage';
 import './App.css';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const STEPS = [
-  { id: 'welcome', label: 'Welcome', icon: 'home' },
-  { id: 'system', label: 'System Check', icon: 'scan' },
-  { id: 'config', label: 'Configuration', icon: 'settings' },
-  { id: 'api-keys', label: 'API Keys', icon: 'key' },
-  { id: 'security', label: 'Security', icon: 'shield' },
-  { id: 'skills', label: 'Skills', icon: 'zap' },
-  { id: 'review', label: 'Review & Install', icon: 'rocket' },
+  { id: 'welcome', label: 'Welcome', icon: 'home', section: 'wizard' },
+  { id: 'system', label: 'System Check', icon: 'scan', section: 'wizard' },
+  { id: 'config', label: 'Configuration', icon: 'settings', section: 'wizard' },
+  { id: 'api-keys', label: 'API Keys', icon: 'key', section: 'wizard' },
+  { id: 'security', label: 'Security', icon: 'shield', section: 'wizard' },
+  { id: 'skills', label: 'Skills', icon: 'zap', section: 'wizard' },
+  { id: 'review', label: 'Review & Install', icon: 'rocket', section: 'wizard' },
+  { id: 'divider', label: '', icon: '', section: 'divider' },
+  { id: 'profiles', label: 'Profiles', icon: 'save', section: 'tools' },
+  { id: 'share', label: 'Share Config', icon: 'share', section: 'tools' },
+  { id: 'marketplace', label: 'Marketplace', icon: 'store', section: 'tools' },
+  { id: 'analytics', label: 'Analytics', icon: 'chart', section: 'tools' },
+  { id: 'desktop', label: 'Desktop App', icon: 'monitor', section: 'tools' },
 ];
 
 function App() {
@@ -66,12 +77,22 @@ function App() {
     setConfig(prev => ({ ...prev, [key]: value }));
   };
 
-  const goNext = () => setCurrentStep(prev => Math.min(prev + 1, STEPS.length - 1));
-  const goPrev = () => setCurrentStep(prev => Math.max(prev - 1, 0));
+  const setFullConfig = (newConfig) => setConfig(newConfig);
+
+  const goNext = () => {
+    let next = currentStep + 1;
+    while (next < STEPS.length && STEPS[next].section === 'divider') next++;
+    setCurrentStep(Math.min(next, STEPS.length - 1));
+  };
+  const goPrev = () => {
+    let prev = currentStep - 1;
+    while (prev >= 0 && STEPS[prev].section === 'divider') prev--;
+    setCurrentStep(Math.max(prev, 0));
+  };
 
   const renderStep = () => {
-    const props = { config, updateConfig, goNext, goPrev, apiUrl: API_URL };
-    switch (STEPS[currentStep].id) {
+    const props = { config, updateConfig, setFullConfig, goNext, goPrev, apiUrl: API_URL };
+    switch (STEPS[currentStep]?.id) {
       case 'welcome': return <WelcomePage {...props} />;
       case 'system': return <SystemCheckPage {...props} systemChecks={systemChecks} setSystemChecks={setSystemChecks} />;
       case 'config': return <InstallConfigPage {...props} installMethods={installMethods} aiProviders={aiProviders} />;
@@ -79,6 +100,11 @@ function App() {
       case 'security': return <SecurityPage {...props} presets={securityPresets} />;
       case 'skills': return <SkillsPage {...props} skills={skills} />;
       case 'review': return <ReviewPage {...props} skills={skills} />;
+      case 'profiles': return <ProfilesPage {...props} />;
+      case 'share': return <ShareConfigPage {...props} skills={skills} />;
+      case 'marketplace': return <MarketplacePage {...props} />;
+      case 'analytics': return <AnalyticsPage {...props} />;
+      case 'desktop': return <DesktopAppPage {...props} />;
       default: return null;
     }
   };

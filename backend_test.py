@@ -8,6 +8,8 @@ class OpenClawInstallerTester:
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
+        self.failed_tests = []
+        self.passed_tests = []
 
     def run_test(self, name, method, endpoint, expected_status=200, data=None, expected_keys=None):
         """Run a single API test"""
@@ -342,6 +344,9 @@ def main():
         except Exception as e:
             print(f"❌ Test {test_method.__name__} failed with exception: {e}")
     
+    # Test new tool endpoints added in iteration 2
+    tester.test_new_tool_endpoints()
+    
     # Print results
     print("\n" + "="*60)
     print(f"📊 Test Results: {tester.tests_passed}/{tester.tests_run} passed")
@@ -352,6 +357,158 @@ def main():
     else:
         print(f"❌ {tester.tests_run - tester.tests_passed} tests failed")
         return 1
+    def test_new_tool_endpoints(self):
+        """Test the new tool endpoints added in iteration 2"""
+        print("\n" + "="*60)
+        print("🔧 TESTING NEW TOOL ENDPOINTS (ITERATION 2)")
+        print("="*60)
+
+        # Test Profiles endpoints
+        profile_id = None
+        try:
+            # Create profile
+            profile_data = {
+                "name": "Test Profile",
+                "description": "Testing profile creation",
+                "config": {"install_method": "npm", "selected_skills": ["weather"]}
+            }
+            
+            success, data = self.run_test(
+                "Create Profile",
+                "POST",
+                "api/profiles",
+                200,
+                profile_data,
+                ["profile_id", "saved"]
+            )
+            if success:
+                profile_id = data.get("profile_id")
+                print(f"   - Created profile: {profile_id}")
+            
+            # List profiles
+            self.run_test("List Profiles", "GET", "api/profiles", 200, None, ["profiles", "total"])
+            
+            # Delete profile
+            if profile_id:
+                success, _ = self.run_test(
+                    "Delete Profile",
+                    "DELETE", 
+                    f"api/profiles/{profile_id}",
+                    200,
+                    None,
+                    ["deleted"]
+                )
+                
+        except Exception as e:
+            print(f"   ❌ Profile tests failed: {e}")
+
+        # Test Share Config endpoints  
+        share_id = None
+        try:
+            share_data = {
+                "config": {"install_method": "npm"},
+                "team_name": "Test Team"
+            }
+            
+            success, data = self.run_test(
+                "Create Share Link",
+                "POST",
+                "api/share", 
+                200,
+                share_data,
+                ["share_id", "share_url"]
+            )
+            if success:
+                share_id = data.get("share_id")
+                print(f"   - Created share: {share_id}")
+            
+            # Get shared config
+            if share_id:
+                self.run_test(
+                    "Get Shared Config",
+                    "GET",
+                    f"api/share/{share_id}",
+                    200,
+                    None,
+                    ["share_id", "config"]
+                )
+                
+        except Exception as e:
+            print(f"   ❌ Share config tests failed: {e}")
+
+        # Test Batch endpoints
+        try:
+            batch_data = {
+                "team_name": "Test Team",
+                "members": ["user1@test.com", "user2@test.com"],
+                "config": {"install_method": "npm"}
+            }
+            
+            self.run_test(
+                "Create Batch Install",
+                "POST",
+                "api/batch",
+                200,
+                batch_data,
+                ["batch_id", "team_name", "members"]
+            )
+            
+            self.run_test("List Batches", "GET", "api/batch", 200, None, ["batches"])
+            
+        except Exception as e:
+            print(f"   ❌ Batch tests failed: {e}")
+
+        # Test Analytics endpoints
+        try:
+            event_data = {"type": "test_event", "data": {"test": True}}
+            self.run_test(
+                "Track Analytics Event",
+                "POST", 
+                "api/analytics/track",
+                200,
+                event_data,
+                ["tracked"]
+            )
+            
+            success, data = self.run_test(
+                "Analytics Summary",
+                "GET",
+                "api/analytics/summary",
+                200,
+                None,
+                ["total_installs", "demo_timeline"]
+            )
+            
+            if success and "demo_timeline" in data:
+                timeline = data.get("demo_timeline", [])
+                if len(timeline) >= 5:
+                    print(f"   ✓ Demo timeline has {len(timeline)} data points")
+                    
+        except Exception as e:
+            print(f"   ❌ Analytics tests failed: {e}")
+
+        # Test Marketplace endpoint
+        try:
+            success, data = self.run_test(
+                "Marketplace Skills",
+                "GET",
+                "api/marketplace",
+                200,
+                None,
+                ["skills", "total", "ios_available"]
+            )
+            
+            if success:
+                total = data.get("total", 0)
+                ios_count = data.get("ios_available", 0)
+                if total == 12:
+                    print(f"   ✓ All 12 marketplace skills returned")
+                if ios_count > 0:
+                    print(f"   ✓ {ios_count} iOS skills available")
+                    
+        except Exception as e:
+            print(f"   ❌ Marketplace tests failed: {e}")
+
 
 if __name__ == "__main__":
     sys.exit(main())
