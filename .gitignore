@@ -121,3 +121,11 @@ dist/protocol.schema.json
 
 # Synthing
 **/.stfolder/
+-e 
+# Environment files
+*.env
+*.env.*
+-e 
+# Environment files
+*.env
+*.env.*

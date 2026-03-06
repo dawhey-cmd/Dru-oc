@@ -4,7 +4,7 @@ import sys
 from datetime import datetime
 
 class OpenClawInstallerTester:
-    def __init__(self, base_url="https://34c1d936-ff1e-449a-aebd-ee889b9b6edd.preview.emergentagent.com"):
+    def __init__(self, base_url="https://claw-setup-wizard.preview.emergentagent.com"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
