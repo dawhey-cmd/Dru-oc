@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ArrowLeft, Download, Copy, CheckCircle2, Loader2, Package, KeyRound, Shield, Zap, Terminal, Wifi, Play } from 'lucide-react';
+import { ArrowLeft, Download, Copy, CheckCircle2, Loader2, Package, KeyRound, Shield, Zap, Terminal, Wifi, Play, FlaskConical, XCircle } from 'lucide-react';
 
 function ReviewPage({ config, goPrev, apiUrl, skills }) {
   const [script, setScript] = useState(null);
@@ -10,6 +10,8 @@ function ReviewPage({ config, goPrev, apiUrl, skills }) {
   const [wsLogs, setWsLogs] = useState([]);
   const [wsRunning, setWsRunning] = useState(false);
   const [wsComplete, setWsComplete] = useState(false);
+  const [testResult, setTestResult] = useState(null);
+  const [testing, setTesting] = useState(false);
   const wsRef = useRef(null);
   const logEndRef = useRef(null);
 
@@ -59,6 +61,24 @@ function ReviewPage({ config, goPrev, apiUrl, skills }) {
     await navigator.clipboard.writeText(script.script);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const testScript = async () => {
+    if (!script) return;
+    setTesting(true);
+    setTestResult(null);
+    try {
+      const res = await fetch(`${apiUrl}/api/validate-script`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ script: script.script }),
+      });
+      const data = await res.json();
+      setTestResult(data);
+    } catch (e) {
+      setTestResult({ valid: false, errors: ['Failed to connect to validation service'] });
+    }
+    setTesting(false);
   };
 
   const startWsInstall = () => {
@@ -195,11 +215,39 @@ function ReviewPage({ config, goPrev, apiUrl, skills }) {
               <button className="btn btn-secondary" data-testid="copy-script-btn" onClick={copyScript}>
                 {copied ? <><CheckCircle2 size={14} /> Copied!</> : <><Copy size={14} /> Copy</>}
               </button>
+              <button className="btn btn-secondary" data-testid="test-script-btn" onClick={testScript} disabled={testing} style={{ background: 'rgba(255,193,7,0.08)', borderColor: 'rgba(255,193,7,0.3)', color: '#FFC107' }}>
+                {testing ? <><Loader2 size={14} className="spin" /> Testing...</> : <><FlaskConical size={14} /> Quick Test</>}
+              </button>
               <button className="btn btn-primary" data-testid="download-script-btn" onClick={downloadScript}>
                 <Download size={14} /> Download .ps1
               </button>
             </div>
           </div>
+          {testResult && (
+            <div style={{ padding: '12px 16px', marginBottom: 12, borderRadius: 8, background: testResult.valid ? 'rgba(0,230,118,0.08)' : 'rgba(255,45,45,0.08)', border: `1px solid ${testResult.valid ? 'rgba(0,230,118,0.3)' : 'rgba(255,45,45,0.3)'}` }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: testResult.warnings?.length || testResult.errors?.length ? 8 : 0 }}>
+                {testResult.valid ? <CheckCircle2 size={16} style={{ color: '#00E676' }} /> : <XCircle size={16} style={{ color: '#FF2D2D' }} />}
+                <span style={{ fontWeight: 600, color: testResult.valid ? '#00E676' : '#FF2D2D' }}>
+                  {testResult.valid ? 'Script syntax valid!' : 'Script has issues'}
+                </span>
+              </div>
+              {testResult.warnings?.length > 0 && (
+                <div style={{ fontSize: '0.78rem', color: '#FFC107' }}>
+                  {testResult.warnings.map((w, i) => <div key={i}>⚠ {w}</div>)}
+                </div>
+              )}
+              {testResult.errors?.length > 0 && (
+                <div style={{ fontSize: '0.78rem', color: '#FF6B6B' }}>
+                  {testResult.errors.map((e, i) => <div key={i}>✗ {e}</div>)}
+                </div>
+              )}
+              {testResult.stats && (
+                <div style={{ fontSize: '0.78rem', color: '#8892A8', marginTop: 6 }}>
+                  {testResult.stats.lines} lines • {testResult.stats.functions} functions • {testResult.stats.variables} variables
+                </div>
+              )}
+            </div>
+          )}
           <div className="terminal-block" style={{ maxHeight: 300, fontSize: '0.75rem' }}>{script.script}</div>
         </div>
       )}

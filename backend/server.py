@@ -469,6 +469,59 @@ async def websocket_install(websocket: WebSocket):
 
 # ─── BULLETPROOF SCRIPT GENERATION ────────────────────────────────────────
 
+class ScriptValidationRequest(BaseModel):
+    script: str
+
+@app.post("/api/validate-script")
+async def validate_script(req: ScriptValidationRequest):
+    """Validate PowerShell script syntax"""
+    script = req.script
+    errors = []
+    warnings = []
+    
+    # Check for basic syntax issues
+    open_braces = script.count('{')
+    close_braces = script.count('}')
+    if open_braces != close_braces:
+        errors.append(f"Mismatched braces: {open_braces} open, {close_braces} close")
+    
+    open_parens = script.count('(')
+    close_parens = script.count(')')
+    if open_parens != close_parens:
+        errors.append(f"Mismatched parentheses: {open_parens} open, {close_parens} close")
+    
+    # Check for common issues
+    if 'rm -rf' in script.lower() or 'format c:' in script.lower():
+        errors.append("Potentially dangerous command detected")
+    
+    if script.count('"') % 2 != 0:
+        warnings.append("Odd number of double quotes - check string literals")
+    
+    if script.count("'") % 2 != 0:
+        warnings.append("Odd number of single quotes - check string literals")
+    
+    # Check for required components
+    if 'function' not in script:
+        warnings.append("No functions defined - consider modularizing")
+    
+    if '$ErrorActionPreference' not in script:
+        warnings.append("$ErrorActionPreference not set - errors may go unnoticed")
+    
+    if 'try' in script and 'catch' not in script:
+        warnings.append("try block without catch - exceptions won't be handled")
+    
+    # Stats
+    lines = len([l for l in script.split('\n') if l.strip() and not l.strip().startswith('#')])
+    functions = script.count('function ')
+    variables = len(set([w for w in script.split() if w.startswith('$') and len(w) > 1]))
+    
+    return {
+        "valid": len(errors) == 0,
+        "errors": errors,
+        "warnings": warnings,
+        "stats": {"lines": lines, "functions": functions, "variables": variables}
+    }
+
 @app.post("/api/generate-script")
 async def generate_script(config: InstallConfig):
     install_path = config.install_path.replace("%USERNAME%", "$env:USERNAME")
