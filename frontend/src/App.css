@@ -1,0 +1,316 @@
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+.scanline-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, rgba(255,45,45,0.15), transparent);
+  z-index: 100;
+  pointer-events: none;
+  animation: scanline 8s linear infinite;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 260px;
+  padding: 40px;
+  min-height: 100vh;
+  position: relative;
+}
+
+.step-container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* Step Header */
+.step-header {
+  margin-bottom: 32px;
+}
+.step-header h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.step-header p {
+  color: #8892A8;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Panels */
+.panel {
+  background: rgba(11, 14, 24, 0.65);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 45, 45, 0.08);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  transition: border-color 0.3s ease;
+}
+.panel:hover {
+  border-color: rgba(255, 45, 45, 0.2);
+}
+.panel-active {
+  border-color: rgba(255, 45, 45, 0.4);
+  box-shadow: 0 0 20px rgba(255, 45, 45, 0.08);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  outline: none;
+}
+.btn-primary {
+  background: #FF2D2D;
+  color: #fff;
+}
+.btn-primary:hover {
+  background: #FF4444;
+  box-shadow: 0 0 20px rgba(255, 45, 45, 0.3);
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: #C4CCE0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.btn-ghost {
+  background: none;
+  color: #8892A8;
+  padding: 8px 16px;
+}
+.btn-ghost:hover {
+  color: #fff;
+}
+
+.step-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Inputs */
+.input-field {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(6, 8, 16, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #E0E6F0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input-field:focus {
+  border-color: rgba(255, 45, 45, 0.5);
+  box-shadow: 0 0 0 3px rgba(255, 45, 45, 0.08);
+}
+.input-field::placeholder {
+  color: #4A5270;
+}
+
+/* Tags */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.tag-pass {
+  background: rgba(0, 200, 83, 0.12);
+  color: #00E676;
+}
+.tag-warn {
+  background: rgba(255, 193, 7, 0.12);
+  color: #FFD54F;
+}
+.tag-fail {
+  background: rgba(255, 45, 45, 0.12);
+  color: #FF5252;
+}
+.tag-info {
+  background: rgba(0, 229, 255, 0.12);
+  color: #00E5FF;
+}
+
+/* Card Grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+/* Skill Card */
+.skill-card {
+  background: rgba(11, 14, 24, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.skill-card:hover {
+  border-color: rgba(255, 45, 45, 0.25);
+  background: rgba(17, 21, 37, 0.6);
+}
+.skill-card.selected {
+  border-color: #FF2D2D;
+  background: rgba(255, 45, 45, 0.06);
+}
+.skill-card.selected::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #FF2D2D;
+}
+
+/* Method Card */
+.method-card {
+  background: rgba(11, 14, 24, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.method-card:hover {
+  border-color: rgba(255, 45, 45, 0.3);
+}
+.method-card.selected {
+  border-color: #FF2D2D;
+  box-shadow: 0 0 20px rgba(255, 45, 45, 0.12);
+}
+
+/* Terminal */
+.terminal-block {
+  background: #0A0C14;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: #8892A8;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  max-height: 400px;
+  overflow-y: auto;
+}
+.terminal-block .prompt {
+  color: #FF2D2D;
+}
+.terminal-block .success {
+  color: #00E676;
+}
+.terminal-block .warn {
+  color: #FFD54F;
+}
+
+/* Provider selector */
+.provider-card {
+  background: rgba(11, 14, 24, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+.provider-card:hover {
+  border-color: rgba(0, 229, 255, 0.3);
+}
+.provider-card.selected {
+  border-color: #00E5FF;
+  background: rgba(0, 229, 255, 0.05);
+}
+
+/* Security toggle */
+.security-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.toggle-switch {
+  width: 44px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+}
+.toggle-switch.active {
+  background: #FF2D2D;
+}
+.toggle-switch .toggle-knob {
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.2s;
+}
+.toggle-switch.active .toggle-knob {
+  transform: translateX(20px);
+}
+
+/* Progress bar */
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF2D2D, #FF6B35);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+@media (max-width: 1024px) {
+  .main-content {
+    margin-left: 0;
+    padding: 20px;
+    padding-top: 70px;
+  }
+}
