@@ -18,6 +18,15 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // External links
   openExternal: (url) => ipcRenderer.invoke('open-external', url),
   
+  // Auto-updater
+  checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
+  downloadUpdate: () => ipcRenderer.invoke('download-update'),
+  installUpdate: () => ipcRenderer.invoke('install-update'),
+  getAppVersion: () => ipcRenderer.invoke('get-app-version'),
+  onUpdaterStatus: (callback) => {
+    ipcRenderer.on('updater-status', (event, data) => callback(data));
+  },
+  
   // Progress listener
   onInstallProgress: (callback) => {
     ipcRenderer.on('install-progress', (event, data) => callback(data));

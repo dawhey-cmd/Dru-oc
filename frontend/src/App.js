@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { I18nProvider } from './context/I18nContext';
+import { TelemetryProvider } from './context/TelemetryContext';
 import Sidebar from './components/Sidebar';
 import WelcomePage from './components/WelcomePage';
 import SystemCheckPage from './components/SystemCheckPage';
@@ -110,24 +112,28 @@ function App() {
   };
 
   return (
-    <div className="app-shell" data-testid="app-shell">
-      <div className="scanline-overlay" />
-      <Sidebar steps={STEPS} currentStep={currentStep} setCurrentStep={setCurrentStep} />
-      <main className="main-content" data-testid="main-content">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentStep}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="step-container"
-          >
-            {renderStep()}
-          </motion.div>
-        </AnimatePresence>
-      </main>
-    </div>
+    <I18nProvider>
+      <TelemetryProvider>
+        <div className="app-shell" data-testid="app-shell">
+          <div className="scanline-overlay" />
+          <Sidebar steps={STEPS} currentStep={currentStep} setCurrentStep={setCurrentStep} />
+          <main className="main-content" data-testid="main-content">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentStep}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                className="step-container"
+              >
+                {renderStep()}
+              </motion.div>
+            </AnimatePresence>
+          </main>
+        </div>
+      </TelemetryProvider>
+    </I18nProvider>
   );
 }
 

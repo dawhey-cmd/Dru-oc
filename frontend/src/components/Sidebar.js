@@ -1,5 +1,7 @@
 import React from 'react';
 import { Home, ScanSearch, Settings, KeyRound, Shield, Zap, Rocket, ChevronRight, Save, Share2, Store, BarChart3, Monitor } from 'lucide-react';
+import { LanguageSelector } from '../context/I18nContext';
+import { TelemetryToggle } from '../context/TelemetryContext';
 
 const iconMap = {
   home: Home, scan: ScanSearch, settings: Settings, key: KeyRound,
@@ -57,7 +59,11 @@ function Sidebar({ steps, currentStep, setCurrentStep }) {
       </nav>
 
       <div className="sidebar-footer" data-testid="sidebar-footer">
-        <div className="footer-version">v2.0.0</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+          <LanguageSelector />
+          <TelemetryToggle />
+        </div>
+        <div className="footer-version">v2.1.0</div>
         <div className="footer-link">
           <a href="https://openclaw.ai" target="_blank" rel="noopener noreferrer">openclaw.ai</a>
         </div>

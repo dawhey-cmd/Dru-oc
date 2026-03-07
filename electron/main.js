@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
+const { autoUpdater } = require('electron-updater');
 const { spawn, exec } = require('child_process');
 const path = require('path');
 const fs = require('fs');
@@ -6,6 +7,10 @@ const os = require('os');
 
 let mainWindow;
 const isDev = process.env.NODE_ENV === 'development';
+
+// Auto-updater configuration
+autoUpdater.autoDownload = false;
+autoUpdater.autoInstallOnAppQuit = true;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -49,6 +54,71 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+// ─── AUTO-UPDATER ────────────────────────────────────────────────────────────
+
+autoUpdater.on('checking-for-update', () => {
+  mainWindow?.webContents.send('updater-status', { status: 'checking' });
+});
+
+autoUpdater.on('update-available', (info) => {
+  mainWindow?.webContents.send('updater-status', { 
+    status: 'available', 
+    version: info.version,
+    releaseNotes: info.releaseNotes 
+  });
+});
+
+autoUpdater.on('update-not-available', () => {
+  mainWindow?.webContents.send('updater-status', { status: 'not-available' });
+});
+
+autoUpdater.on('download-progress', (progress) => {
+  mainWindow?.webContents.send('updater-status', { 
+    status: 'downloading', 
+    percent: progress.percent,
+    bytesPerSecond: progress.bytesPerSecond
+  });
+});
+
+autoUpdater.on('update-downloaded', (info) => {
+  mainWindow?.webContents.send('updater-status', { 
+    status: 'downloaded', 
+    version: info.version 
+  });
+});
+
+autoUpdater.on('error', (err) => {
+  mainWindow?.webContents.send('updater-status', { status: 'error', error: err.message });
+});
+
+// IPC handlers for auto-update
+ipcMain.handle('check-for-updates', async () => {
+  if (isDev) return { status: 'dev-mode' };
+  try {
+    const result = await autoUpdater.checkForUpdates();
+    return { status: 'checking', updateInfo: result?.updateInfo };
+  } catch (err) {
+    return { status: 'error', error: err.message };
+  }
+});
+
+ipcMain.handle('download-update', async () => {
+  try {
+    await autoUpdater.downloadUpdate();
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+});
+
+ipcMain.handle('install-update', () => {
+  autoUpdater.quitAndInstall(false, true);
+});
+
+ipcMain.handle('get-app-version', () => {
+  return app.getVersion();
 });
 
 // ─── IPC HANDLERS ────────────────────────────────────────────────────────────
