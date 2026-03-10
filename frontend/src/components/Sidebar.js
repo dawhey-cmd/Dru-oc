@@ -1,6 +1,6 @@
 import React from 'react';
 import { Home, ScanSearch, Settings, KeyRound, Shield, Zap, Rocket, ChevronRight, Save, Share2, Store, BarChart3, Monitor } from 'lucide-react';
-import { LanguageSelector } from '../context/I18nContext';
+import { LanguageSelector, useI18n } from '../context/I18nContext';
 import { TelemetryToggle } from '../context/TelemetryContext';
 
 const iconMap = {
@@ -9,7 +9,16 @@ const iconMap = {
   share: Share2, store: Store, chart: BarChart3, monitor: Monitor,
 };
 
+const navKeyMap = {
+  'welcome': 'nav.welcome', 'system': 'nav.system', 'config': 'nav.config',
+  'api-keys': 'nav.apiKeys', 'security': 'nav.security', 'skills': 'nav.skills',
+  'review': 'nav.review', 'profiles': 'nav.profiles', 'share': 'nav.share',
+  'marketplace': 'nav.marketplace', 'analytics': 'nav.analytics', 'desktop': 'nav.desktop',
+};
+
 function Sidebar({ steps, currentStep, setCurrentStep }) {
+  const { t } = useI18n();
+
   return (
     <aside className="sidebar" data-testid="sidebar">
       <div className="sidebar-brand" data-testid="sidebar-brand">
@@ -27,7 +36,7 @@ function Sidebar({ steps, currentStep, setCurrentStep }) {
               <div key="divider" style={{ padding: '8px 20px', margin: '4px 0' }}>
                 <div style={{ height: 1, background: 'rgba(255,255,255,0.06)' }} />
                 <div style={{ fontSize: '0.65rem', color: '#3A4260', fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', marginTop: 10, marginBottom: 2 }}>
-                  Tools
+                  {t('nav.tools')}
                 </div>
               </div>
             );
@@ -50,7 +59,7 @@ function Sidebar({ steps, currentStep, setCurrentStep }) {
               </div>
               <div className="nav-step-content">
                 <Icon size={15} />
-                <span>{step.label}</span>
+                <span>{t(navKeyMap[step.id] || step.label)}</span>
               </div>
               {isActive && <ChevronRight size={14} className="nav-arrow" />}
             </button>
