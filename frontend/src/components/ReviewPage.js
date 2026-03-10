@@ -153,8 +153,29 @@ function ReviewPage({ config, goPrev, apiUrl, skills }) {
         </div>
       </div>
 
+      {/* Quick Start Guide */}
+      {!script && (
+        <div className="panel" data-testid="quick-start-guide" style={{ borderColor: 'rgba(255,45,45,0.2)', background: 'rgba(255,45,45,0.03)', marginBottom: 20 }}>
+          <h3 style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 600, color: '#fff', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Terminal size={16} style={{ color: '#FF2D2D' }} /> How to Install OpenClaw
+          </h3>
+          <div style={{ display: 'flex', gap: 16 }}>
+            {[
+              { step: '1', text: 'Click "Generate Script" below' },
+              { step: '2', text: 'Click "Download .ps1" to save the file' },
+              { step: '3', text: 'Right-click the file → "Run with PowerShell"' },
+            ].map(s => (
+              <div key={s.step} style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'rgba(255,45,45,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', color: '#FF2D2D', fontWeight: 700, flexShrink: 0 }}>{s.step}</div>
+                <span style={{ fontSize: '0.85rem', color: '#C4CCE0' }}>{s.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="panel" style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-        <button className="btn btn-primary" data-testid="generate-script-btn" onClick={generateScript} disabled={generating}>
+        <button className="btn btn-primary" data-testid="generate-script-btn" onClick={generateScript} disabled={generating} style={{ fontSize: '0.95rem', padding: '10px 24px' }}>
           {generating ? <><Loader2 size={14} className="spin" /> {t('review.generating')}</> : <><Terminal size={14} /> {t('review.generateScript')}</>}
         </button>
         <button className="btn btn-secondary" data-testid="save-config-btn" onClick={saveConfig} disabled={saving}>
